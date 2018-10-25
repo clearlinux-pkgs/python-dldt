@@ -1,2 +1,1 @@
-mkdir -p %{buildroot}/usr/lib64
-install -m 0755 inference-engine/bin/intel64/RelWithDebInfo/lib/ie_api.so %{buildroot}/usr/lib64
+install -m 0755 inference-engine/bin/intel64/RelWithDebInfo/lib/ie_api.so %{buildroot}/usr/lib/python3.7/site-packages/inference_engine/
