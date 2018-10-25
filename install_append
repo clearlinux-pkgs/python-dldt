@@ -1,2 +1,3 @@
 install -m 0755 inference-engine/bin/intel64/RelWithDebInfo/lib/ie_api.so %{buildroot}/usr/lib/python3.7/site-packages/inference_engine/
-ln -s inference_engine %{buildroot}/usr/lib/python3.7/site-packages/openvino
+mkdir %{buildroot}/usr/lib/python3.7/site-packages/openvino/
+ln -s ../inference_engine %{buildroot}/usr/lib/python3.7/site-packages/openvino/inference_engine
