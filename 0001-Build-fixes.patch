@@ -233,3 +233,22 @@ index fa51aa7..e2f22c7 100644
  numpy
  cython
 \ No newline at end of file
+--- dldt-2018_R3/inference-engine/ie_bridges/python/setup.py~	2018-10-16 11:00:32.000000000 +0000
++++ dldt-2018_R3/inference-engine/ie_bridges/python/setup.py	2018-10-25 13:34:40.174660621 +0000
+@@ -155,16 +155,6 @@
+ with open(REQUIREMENTS_FILE) as reqs:
+     requirements = set(reqs.read().splitlines())
+ 
+-# do not spoil pre-installed opencv (in case it was built from source)
+-_opencv_package = "opencv-python"
+-try:
+-    import cv2
+-
+-    if _opencv_package in requirements:
+-        requirements.remove(_opencv_package)
+-except ImportError:
+-    requirements.add(_opencv_package)
+-
+ 
+ c_sources = [
+     PACKAGE / 'ie_driver.cpp',
