@@ -4,7 +4,7 @@
 #
 Name     : python-dldt
 Version  : 2018.r3
-Release  : 9
+Release  : 10
 URL      : https://github.com/opencv/dldt/archive/2018_R3.tar.gz
 Source0  : https://github.com/opencv/dldt/archive/2018_R3.tar.gz
 Summary  : GoogleTest (with main() function)
@@ -21,6 +21,7 @@ Requires: protobuf
 Requires: tensorflow
 BuildRequires : Cython
 BuildRequires : buildreq-cmake
+BuildRequires : buildreq-distutils23
 BuildRequires : buildreq-distutils3
 BuildRequires : dldt-data
 BuildRequires : dldt-dev
@@ -37,6 +38,15 @@ Patch1: 0001-Build-fixes.patch
 %description
 The Google Mock class generator is an application that is part of cppclean.
 visit http://code.google.com/p/cppclean/
+
+%package legacypython
+Summary: legacypython components for the python-dldt package.
+Group: Default
+Requires: python-core
+
+%description legacypython
+legacypython components for the python-dldt package.
+
 
 %package license
 Summary: license components for the python-dldt package.
@@ -73,9 +83,15 @@ python3 components for the python-dldt package.
 pushd inference-engine
 mkdir -p clr-build
 pushd clr-build
-cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_AR=/usr/bin/gcc-ar -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib .. -DENABLE_CLDNN=0 -DENABLE_INTEL_OMP=0 -DENABLE_OPENCV=0 -DENABLE_CLDNN_BUILD=1 -DENABLE_SAMPLES_CORE=1 -DENABLE_PYTHON_BINDINGS=1 -DINSTALL_GMOCK=0 -DINSTALL_GTEST=0 -DBUILD_GMOCK=1 -DBUILD_GTEST=0
+cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_AR=/usr/bin/gcc-ar -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib .. -DENABLE_CLDNN=0 -DENABLE_INTEL_OMP=0 -DENABLE_OPENCV=0 -DENABLE_CLDNN_BUILD=1 -DENABLE_SAMPLES_CORE=1 -DENABLE_PYTHON_BINDINGS=1 -DINSTALL_GMOCK=0 -DINSTALL_GTEST=0 -DBUILD_GMOCK=1 -DBUILD_GTEST=0 -DCMAKE_CYTHON_EXECUTABLE=cython -DCMAKE_PYTHON_VERSION=3
 pushd ie_bridges/python
 make -j10
+cp ../../../bin/intel64/RelWithDebInfo/lib/ie_api.so ../../../python3-ie_api.so
+popd
+cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_AR=/usr/bin/gcc-ar -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib .. -DENABLE_CLDNN=0 -DENABLE_INTEL_OMP=0 -DENABLE_OPENCV=0 -DENABLE_CLDNN_BUILD=1 -DENABLE_SAMPLES_CORE=1 -DENABLE_PYTHON_BINDINGS=1 -DINSTALL_GMOCK=0 -DINSTALL_GTEST=0 -DBUILD_GMOCK=1 -DBUILD_GTEST=0 -DCMAKE_CYTHON_EXECUTABLE=cython -DCMAKE_PYTHON_VERSION=2
+pushd ie_bridges/python
+make -j10
+cp ../../../bin/intel64/RelWithDebInfo/lib/ie_api.so ../../../python2-ie_api.so
 popd
 popd
 popd
@@ -84,16 +100,18 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1540503242
+export SOURCE_DATE_EPOCH=1540509900
 export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 pushd inference-engine/clr-build/ie_bridges/python
-python3 setup.py build
+python2 setup.py build -b py2
+python3 setup.py build -b py3
 
 popd
 %install
+export SOURCE_DATE_EPOCH=1540509900
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/python-dldt
 cp LICENSE %{buildroot}/usr/share/package-licenses/python-dldt/LICENSE
@@ -108,19 +126,27 @@ cp inference-engine/thirdparty/mkl-dnn/LICENSE %{buildroot}/usr/share/package-li
 cp inference-engine/thirdparty/mkl-dnn/src/cpu/xbyak/COPYRIGHT %{buildroot}/usr/share/package-licenses/python-dldt/inference-engine_thirdparty_mkl-dnn_src_cpu_xbyak_COPYRIGHT
 cp inference-engine/thirdparty/mkl-dnn/tests/gtests/gtest/LICENSE %{buildroot}/usr/share/package-licenses/python-dldt/inference-engine_thirdparty_mkl-dnn_tests_gtests_gtest_LICENSE
 pushd inference-engine/clr-build/ie_bridges/python
-python3 -tt setup.py build  install --root=%{buildroot}
+python2 -tt setup.py build -b py2 install --root=%{buildroot} --force
+python3 -tt setup.py build -b py3 install --root=%{buildroot} --force
 popd
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
 ## install_append content
-install -m 0755 inference-engine/bin/intel64/RelWithDebInfo/lib/ie_api.so %{buildroot}/usr/lib/python3.7/site-packages/inference_engine/
+install -m 0755 inference-engine/python3-ie_api.so %{buildroot}/usr/lib/python3.7/site-packages/inference_engine/
+install -m 0755 inference-engine/python2-ie_api.so %{buildroot}/usr/lib/python2.7/site-packages/inference_engine/
 mkdir %{buildroot}/usr/lib/python3.7/site-packages/openvino/
 ln -s ../inference_engine %{buildroot}/usr/lib/python3.7/site-packages/openvino/inference_engine
+mkdir %{buildroot}/usr/lib/python2.7/site-packages/openvino/
+ln -s ../inference_engine %{buildroot}/usr/lib/python2.7/site-packages/openvino/inference_engine
 ## install_append end
 
 %files
 %defattr(-,root,root,-)
+
+%files legacypython
+%defattr(-,root,root,-)
+/usr/lib/python2*/*
 
 %files license
 %defattr(0644,root,root,0755)
