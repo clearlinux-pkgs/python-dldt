@@ -1,0 +1,9 @@
+pushd inference-engine
+mkdir -p clr-build
+pushd clr-build
+cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_AR=/usr/bin/gcc-ar -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib .. -DENABLE_CLDNN=0 -DENABLE_INTEL_OMP=0 -DENABLE_OPENCV=0 -DENABLE_CLDNN_BUILD=1 -DENABLE_SAMPLES_CORE=1 -DENABLE_PYTHON_BINDINGS=1 -DINSTALL_GMOCK=0 -DINSTALL_GTEST=0 -DBUILD_GMOCK=1 -DBUILD_GTEST=0
+pushd ie_bridges/python
+make -j10
+popd
+popd
+popd

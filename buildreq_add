@@ -1,0 +1,17 @@
+# This file contains additional build requirements that did not get
+# picked up automatically. One name per line, no whitespace.
+dldt-dev
+dldt-data
+openblas
+opencv-python
+# This file contains additional build requirements that did not get
+# picked up automatically. One name per line, no whitespace.
+Cython
+opencv-dev
+opencv
+opencv-python
+openblas
+mkl-dnn-dev
+googletest
+googletest-dev
+pugixml-dev
