@@ -10,6 +10,9 @@ Source0  : https://github.com/opencv/dldt/archive/2018_R3.tar.gz
 Summary  : GoogleTest (with main() function)
 Group    : Development/Tools
 License  : Apache-2.0 BSD-3-Clause BSL-1.0 MIT
+Requires: python-dldt-license = %{version}-%{release}
+Requires: python-dldt-python = %{version}-%{release}
+Requires: python-dldt-python3 = %{version}-%{release}
 Requires: networkx
 Requires: numpy
 Requires: onnx
@@ -36,6 +39,41 @@ Patch1: 0001-Build-fixes.patch
 The Google Mock class generator is an application that is part of cppclean.
 visit http://code.google.com/p/cppclean/
 
+%package legacypython
+Summary: legacypython components for the python-dldt package.
+Group: Default
+Requires: python-core
+
+%description legacypython
+legacypython components for the python-dldt package.
+
+
+%package license
+Summary: license components for the python-dldt package.
+Group: Default
+
+%description license
+license components for the python-dldt package.
+
+
+%package python
+Summary: python components for the python-dldt package.
+Group: Default
+Requires: python-dldt-python3 = %{version}-%{release}
+
+%description python
+python components for the python-dldt package.
+
+
+%package python3
+Summary: python3 components for the python-dldt package.
+Group: Default
+Requires: python3-core
+
+%description python3
+python3 components for the python-dldt package.
+
+
 %prep
 %setup -q -n dldt-2018_R3
 %patch1 -p1
@@ -50,7 +88,7 @@ pushd ie_bridges/python
 make -j10
 cp ../../../bin/intel64/RelWithDebInfo/lib/ie_api.so ../../../python3-ie_api.so
 popd
-cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_AR=/usr/bin/gcc-ar -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib .. -DENABLE_CLDNN=0 -DENABLE_INTEL_OMP=0 -DENABLE_OPENCV=0 -DENABLE_CLDNN_BUILD=1 -DENABLE_SAMPLES_CORE=1 -DENABLE_PYTHON_BINDINGS=1 -DINSTALL_GMOCK=0 -DINSTALL_GTEST=0 -DBUILD_GMOCK=1 -DBUILD_GTEST=0 -DCMAKE_CYTHON_EXECUTABLE=cython -DCMAKE_PYTHON_VERSION=2
+cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_AR=/usr/bin/gcc-ar -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib .. -DENABLE_CLDNN=0 -DENABLE_INTEL_OMP=0 -DENABLE_OPENCV=0 -DENABLE_CLDNN_BUILD=1 -DENABLE_SAMPLES_CORE=1 -DENABLE_PYTHON_BINDINGS=1 -DINSTALL_GMOCK=0 -DINSTALL_GTEST=0 -DBUILD_GMOCK=1 -DBUILD_GTEST=0 -DCMAKE_CYTHON_EXECUTABLE=cython -DCMAKE_PYTHON_VERSION=2 -DPYTHON_LIBRARY=/usr/lib64/libpython2.7.so -DPYTHON_EXECUTABLE=/usr/bin/python2 -DPYTHON_INCLUDE_DIR=/usr/include/python2.7
 pushd ie_bridges/python
 make -j10
 cp ../../../bin/intel64/RelWithDebInfo/lib/ie_api.so ../../../python2-ie_api.so
@@ -62,7 +100,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1540512585
+export SOURCE_DATE_EPOCH=1540577531
 export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
@@ -73,7 +111,7 @@ python3 setup.py build -b py3
 
 popd
 %install
-export SOURCE_DATE_EPOCH=1540512585
+export SOURCE_DATE_EPOCH=1540577531
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/python-dldt
 cp LICENSE %{buildroot}/usr/share/package-licenses/python-dldt/LICENSE
@@ -105,3 +143,28 @@ ln -s ../inference_engine %{buildroot}/usr/lib/python2.7/site-packages/openvino/
 
 %files
 %defattr(-,root,root,-)
+
+%files legacypython
+%defattr(-,root,root,-)
+/usr/lib/python2*/*
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/python-dldt/LICENSE
+/usr/share/package-licenses/python-dldt/inference-engine_samples_thirdparty_gflags_COPYING.txt
+/usr/share/package-licenses/python-dldt/inference-engine_tests_libs_gtest_googlemock_LICENSE
+/usr/share/package-licenses/python-dldt/inference-engine_tests_libs_gtest_googlemock_scripts_generator_LICENSE
+/usr/share/package-licenses/python-dldt/inference-engine_tests_libs_gtest_googletest_LICENSE
+/usr/share/package-licenses/python-dldt/inference-engine_thirdparty_clDNN_common_boost_1.64.0_LICENSE_1_0.txt
+/usr/share/package-licenses/python-dldt/inference-engine_thirdparty_clDNN_common_googletest-fused_License.txt
+/usr/share/package-licenses/python-dldt/inference-engine_thirdparty_clDNN_common_khronos_ocl_clhpp_LICENSE.txt
+/usr/share/package-licenses/python-dldt/inference-engine_thirdparty_mkl-dnn_LICENSE
+/usr/share/package-licenses/python-dldt/inference-engine_thirdparty_mkl-dnn_src_cpu_xbyak_COPYRIGHT
+/usr/share/package-licenses/python-dldt/inference-engine_thirdparty_mkl-dnn_tests_gtests_gtest_LICENSE
+
+%files python
+%defattr(-,root,root,-)
+
+%files python3
+%defattr(-,root,root,-)
+/usr/lib/python3*/*

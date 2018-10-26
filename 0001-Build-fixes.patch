@@ -10,8 +10,6 @@ Subject: [PATCH] Build fixes.
  inference-engine/cmake/os_flags.cmake         |  2 +-
  .../cmake/share/InferenceEngineConfig.cmake   |  2 +-
  .../ie_bridges/python/CMakeLists.txt          |  8 ++-
- .../ie_bridges/python/cmake/FindCython.cmake  | 16 +----
- .../ie_bridges/python/cmake/UseCython.cmake   |  2 +-
  .../python/inference_engine/CMakeLists.txt    |  7 +-
  .../ie_bridges/python/requirements.txt        |  1 -
  inference-engine/ie_bridges/python/setup.py   | 64 ++-----------------
@@ -131,46 +129,6 @@ index 0fed229..e4d3449 100644
  
  # Process the CMakeLists.txt in the 'src' and 'bin' directory.
  add_subdirectory( inference_engine )
-diff --git a/inference-engine/ie_bridges/python/cmake/FindCython.cmake b/inference-engine/ie_bridges/python/cmake/FindCython.cmake
-index 30e1f03..ab0bce9 100644
---- a/inference-engine/ie_bridges/python/cmake/FindCython.cmake
-+++ b/inference-engine/ie_bridges/python/cmake/FindCython.cmake
-@@ -22,21 +22,7 @@
- # limitations under the License.
- #=============================================================================
- 
--# Use the Cython executable that lives next to the Python executable
--# if it is a local installation.
--find_package( PythonInterp )
--if( PYTHONINTERP_FOUND )
--  get_filename_component( _python_path ${PYTHON_EXECUTABLE} PATH )
--  find_program( CYTHON_EXECUTABLE
--    NAMES cython cython.bat cython3
--    HINTS ${_python_path} $ENV{HOME}/.local/bin
--    )
--else()
--  find_program( CYTHON_EXECUTABLE
--    NAMES cython cython.bat cython3
--    )
--endif()
--
-+set ( CYTHON_EXECUTABLE "${CMAKE_CYTHON_EXECUTABLE}" )
- 
- include( FindPackageHandleStandardArgs )
- FIND_PACKAGE_HANDLE_STANDARD_ARGS( Cython REQUIRED_VARS CYTHON_EXECUTABLE )
-diff --git a/inference-engine/ie_bridges/python/cmake/UseCython.cmake b/inference-engine/ie_bridges/python/cmake/UseCython.cmake
-index ee631b7..5740f87 100644
---- a/inference-engine/ie_bridges/python/cmake/UseCython.cmake
-+++ b/inference-engine/ie_bridges/python/cmake/UseCython.cmake
-@@ -72,7 +72,7 @@ set( CYTHON_FLAGS "" CACHE STRING
- mark_as_advanced( CYTHON_ANNOTATE CYTHON_NO_DOCSTRINGS CYTHON_FLAGS )
- 
- find_package( Cython REQUIRED )
--find_package( PythonLibs REQUIRED )
-+find_package( Python "${CMAKE_PYTHON_VERSION}" EXACT REQUIRED )
- 
- set( CYTHON_CXX_EXTENSION "cxx" )
- set( CYTHON_C_EXTENSION "c" )
 diff --git a/inference-engine/ie_bridges/python/inference_engine/CMakeLists.txt b/inference-engine/ie_bridges/python/inference_engine/CMakeLists.txt
 index 2835e04..f94e1da 100644
 --- a/inference-engine/ie_bridges/python/inference_engine/CMakeLists.txt
