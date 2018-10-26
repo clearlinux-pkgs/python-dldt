@@ -4,7 +4,7 @@
 #
 Name     : python-dldt
 Version  : 2018.r3
-Release  : 12
+Release  : 13
 URL      : https://github.com/opencv/dldt/archive/2018_R3.tar.gz
 Source0  : https://github.com/opencv/dldt/archive/2018_R3.tar.gz
 Summary  : GoogleTest (with main() function)
@@ -23,7 +23,6 @@ BuildRequires : Cython
 BuildRequires : buildreq-cmake
 BuildRequires : buildreq-distutils23
 BuildRequires : buildreq-distutils3
-BuildRequires : dldt-data
 BuildRequires : dldt-dev
 BuildRequires : googletest
 BuildRequires : googletest-dev
@@ -100,7 +99,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1540578633
+export SOURCE_DATE_EPOCH=1540584451
 export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
@@ -111,7 +110,7 @@ python3 setup.py build -b py3
 
 popd
 %install
-export SOURCE_DATE_EPOCH=1540578633
+export SOURCE_DATE_EPOCH=1540584451
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/python-dldt
 cp LICENSE %{buildroot}/usr/share/package-licenses/python-dldt/LICENSE
