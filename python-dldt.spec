@@ -4,7 +4,7 @@
 #
 Name     : python-dldt
 Version  : 2018.r3
-Release  : 11
+Release  : 12
 URL      : https://github.com/opencv/dldt/archive/2018_R3.tar.gz
 Source0  : https://github.com/opencv/dldt/archive/2018_R3.tar.gz
 Summary  : GoogleTest (with main() function)
@@ -100,7 +100,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1540577531
+export SOURCE_DATE_EPOCH=1540578633
 export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
@@ -111,7 +111,7 @@ python3 setup.py build -b py3
 
 popd
 %install
-export SOURCE_DATE_EPOCH=1540577531
+export SOURCE_DATE_EPOCH=1540578633
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/python-dldt
 cp LICENSE %{buildroot}/usr/share/package-licenses/python-dldt/LICENSE
@@ -138,6 +138,7 @@ install -m 0755 inference-engine/python2-ie_api.so %{buildroot}/usr/lib/python2.
 mkdir %{buildroot}/usr/lib/python3.7/site-packages/openvino/
 ln -s ../inference_engine %{buildroot}/usr/lib/python3.7/site-packages/openvino/inference_engine
 mkdir %{buildroot}/usr/lib/python2.7/site-packages/openvino/
+touch %{buildroot}/usr/lib/python2.7/site-packages/openvino/__init__.py
 ln -s ../inference_engine %{buildroot}/usr/lib/python2.7/site-packages/openvino/inference_engine
 ## install_append end
 

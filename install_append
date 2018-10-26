@@ -3,4 +3,5 @@ install -m 0755 inference-engine/python2-ie_api.so %{buildroot}/usr/lib/python2.
 mkdir %{buildroot}/usr/lib/python3.7/site-packages/openvino/
 ln -s ../inference_engine %{buildroot}/usr/lib/python3.7/site-packages/openvino/inference_engine
 mkdir %{buildroot}/usr/lib/python2.7/site-packages/openvino/
+touch %{buildroot}/usr/lib/python2.7/site-packages/openvino/__init__.py
 ln -s ../inference_engine %{buildroot}/usr/lib/python2.7/site-packages/openvino/inference_engine
