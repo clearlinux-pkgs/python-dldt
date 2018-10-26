@@ -1,4 +1,4 @@
-From dc7a377630b3cc24479c86f29699dd1ecbc31d92 Mon Sep 17 00:00:00 2001
+From e8d53e0b2a3d2520137687ebd13208cc25f46be3 Mon Sep 17 00:00:00 2001
 From: Arjan van de Ven <arjan@linux.intel.com>
 Date: Wed, 24 Oct 2018 10:09:33 -0700
 Subject: [PATCH] Build fixes.
@@ -11,7 +11,7 @@ Subject: [PATCH] Build fixes.
  .../cmake/share/InferenceEngineConfig.cmake   |  2 +-
  .../ie_bridges/python/CMakeLists.txt          |  8 ++-
  .../ie_bridges/python/cmake/FindCython.cmake  | 16 +----
- .../ie_bridges/python/cmake/UseCython.cmake   |  4 +-
+ .../ie_bridges/python/cmake/UseCython.cmake   |  2 +-
  .../python/inference_engine/CMakeLists.txt    |  7 +-
  .../ie_bridges/python/requirements.txt        |  1 -
  inference-engine/ie_bridges/python/setup.py   | 64 ++-----------------
@@ -19,7 +19,7 @@ Subject: [PATCH] Build fixes.
  inference-engine/src/extension/CMakeLists.txt |  1 +
  .../src/inference_engine/CMakeLists.txt       | 13 +++-
  .../thirdparty/mkl-dnn/cmake/platform.cmake   |  4 +-
- 15 files changed, 57 insertions(+), 91 deletions(-)
+ 15 files changed, 56 insertions(+), 90 deletions(-)
 
 diff --git a/inference-engine/CMakeLists.txt b/inference-engine/CMakeLists.txt
 index 2f561d9..6d15d21 100644
@@ -159,17 +159,15 @@ index 30e1f03..ab0bce9 100644
  include( FindPackageHandleStandardArgs )
  FIND_PACKAGE_HANDLE_STANDARD_ARGS( Cython REQUIRED_VARS CYTHON_EXECUTABLE )
 diff --git a/inference-engine/ie_bridges/python/cmake/UseCython.cmake b/inference-engine/ie_bridges/python/cmake/UseCython.cmake
-index ee631b7..bb52961 100644
+index ee631b7..5740f87 100644
 --- a/inference-engine/ie_bridges/python/cmake/UseCython.cmake
 +++ b/inference-engine/ie_bridges/python/cmake/UseCython.cmake
-@@ -71,8 +71,8 @@ set( CYTHON_FLAGS "" CACHE STRING
-   "Extra flags to the cython compiler." )
+@@ -72,7 +72,7 @@ set( CYTHON_FLAGS "" CACHE STRING
  mark_as_advanced( CYTHON_ANNOTATE CYTHON_NO_DOCSTRINGS CYTHON_FLAGS )
  
--find_package( Cython REQUIRED )
+ find_package( Cython REQUIRED )
 -find_package( PythonLibs REQUIRED )
-+find_package( Cython "${CMAKE_PYTHON_VERSION}" REQUIRED )
-+find_package( PythonLibs "${CMAKE_PYTHON_VERSION}" REQUIRED )
++find_package( Python "${CMAKE_PYTHON_VERSION}" EXACT REQUIRED )
  
  set( CYTHON_CXX_EXTENSION "cxx" )
  set( CYTHON_C_EXTENSION "c" )
