@@ -1,5 +1,5 @@
-install -m 0755 inference-engine/python3-ie_api.so %{buildroot}/usr/lib/python3.7/site-packages/inference_engine/ie_api.so
-install -m 0755 inference-engine/python2-ie_api.so %{buildroot}/usr/lib/python2.7/site-packages/inference_engine/ie_api.so
+install -m 0755 -D inference-engine/bin/intel64/RelWithDebInfo/lib/python_api/python3.7/openvino/inference_engine/ie_api.so %{buildroot}/usr/lib/python3.7/site-packages/inference_engine/ie_api.so
+install -m 0755 -D inference-engine/bin/intel64/RelWithDebInfo/lib/python_api/python2.7/openvino/inference_engine/ie_api.so %{buildroot}/usr/lib/python2.7/site-packages/inference_engine/ie_api.so
 mkdir %{buildroot}/usr/lib/python3.7/site-packages/openvino/
 ln -s ../inference_engine %{buildroot}/usr/lib/python3.7/site-packages/openvino/inference_engine
 mkdir %{buildroot}/usr/lib/python2.7/site-packages/openvino/

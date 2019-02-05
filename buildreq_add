@@ -1,16 +1,13 @@
 # This file contains additional build requirements that did not get
 # picked up automatically. One name per line, no whitespace.
-dldt-dev
-openblas
-opencv-python
-# This file contains additional build requirements that did not get
-# picked up automatically. One name per line, no whitespace.
 Cython
-opencv-dev
-opencv
-opencv-python
-openblas
-mkl-dnn-dev
+ade-dev
+dldt-dev
 googletest
 googletest-dev
+mkl-dnn-dev
+openblas
+opencv
+opencv-dev
+opencv-python
 pugixml-dev
