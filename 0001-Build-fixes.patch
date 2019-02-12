@@ -1,7 +1,7 @@
-From 2bb27a578b5364619ae3b66372c3474c42ef018a Mon Sep 17 00:00:00 2001
+From a27b13b14050f383660026de712827d405efe6ad Mon Sep 17 00:00:00 2001
 From: "Brett T. Warden" <brett.t.warden@intel.com>
 Date: Tue, 5 Feb 2019 09:28:24 -0800
-Subject: [PATCH] Build fixes.
+Subject: [PATCH 1/4] Build fixes.
 
 ---
  inference-engine/CMakeLists.txt               | 10 +++

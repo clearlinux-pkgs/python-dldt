@@ -1,0 +1,30 @@
+From 25991af7d8469d7666558a1877f1e273ecc6d0bb Mon Sep 17 00:00:00 2001
+From: "Brett T. Warden" <brett.t.warden@intel.com>
+Date: Tue, 12 Feb 2019 13:12:52 -0800
+Subject: [PATCH 4/4] Fix Python setup.py
+
+---
+ inference-engine/ie_bridges/python/setup.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/inference-engine/ie_bridges/python/setup.py b/inference-engine/ie_bridges/python/setup.py
+index 9bbe21d..d1d0a29 100644
+--- a/inference-engine/ie_bridges/python/setup.py
++++ b/inference-engine/ie_bridges/python/setup.py
+@@ -131,10 +131,11 @@ cmdclass = {
+ }
+ 
+ setup(
+-    name="src",
++    name="openvino.inference_engine",
+     version='1.0',
+     description='Python inference for Inference Engine',
+-    packages=find_packages(exclude=['tests']),
++    package_dir={'': 'src'},
++    packages=find_packages(where='src'),
+     package_data={PACKAGE_NAME: ['*.so', '*.dll', '*dylib*', '*.pyd']},
+     include_package_data=True,
+     ext_modules=extensions,
+-- 
+2.20.1
+

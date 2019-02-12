@@ -1,7 +1,7 @@
-From 72bd2dfa12899dd7ab78e3d83a2139d6379ab4ac Mon Sep 17 00:00:00 2001
+From 6a21a1a56b16eb295c3f5f9d6adc7188eace69a8 Mon Sep 17 00:00:00 2001
 From: "Brett T. Warden" <brett.t.warden@intel.com>
 Date: Tue, 29 Jan 2019 11:04:44 -0800
-Subject: [PATCH 10/11] Don't look for ade in a subdir
+Subject: [PATCH 3/4] Don't look for ade in a subdir
 
 ---
  inference-engine/thirdparty/CMakeLists.txt | 1 -

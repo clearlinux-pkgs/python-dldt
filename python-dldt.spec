@@ -4,7 +4,7 @@
 #
 Name     : python-dldt
 Version  : 2018.r5
-Release  : 15
+Release  : 16
 URL      : https://github.com/opencv/dldt/archive/2018_R5.tar.gz
 Source0  : https://github.com/opencv/dldt/archive/2018_R5.tar.gz
 Summary  : GoogleTest (with main() function)
@@ -36,7 +36,8 @@ BuildRequires : opencv-python
 BuildRequires : pugixml-dev
 Patch1: 0001-Build-fixes.patch
 Patch2: 0002-Add-fopenmp.patch
-Patch3: 0010-Don-t-look-for-ade-in-a-subdir.patch
+Patch3: 0003-Don-t-look-for-ade-in-a-subdir.patch
+Patch4: 0004-Fix-Python-setup.py.patch
 
 %description
 The Google Mock class generator is an application that is part of cppclean.
@@ -82,17 +83,18 @@ python3 components for the python-dldt package.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 ## build_prepend content
 pushd inference-engine
 mkdir -p clr-build
 pushd clr-build
-cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_AR=/usr/bin/gcc-ar -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib .. -DENABLE_CLDNN=0 -DENABLE_INTEL_OMP=0 -DENABLE_OPENCV=0 -DENABLE_CLDNN_BUILD=1 -DENABLE_SAMPLES_CORE=1 -DENABLE_PYTHON_BINDINGS=1 -DINSTALL_GMOCK=0 -DINSTALL_GTEST=0 -DBUILD_GMOCK=1 -DBUILD_GTEST=0 -DENABLE_GNA=0 -DCMAKE_CYTHON_EXECUTABLE=cython -DCMAKE_PYTHON_VERSION=3
+cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_AR=/usr/bin/gcc-ar -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib .. -DENABLE_CLDNN=0 -DENABLE_INTEL_OMP=0 -DENABLE_OPENCV=0 -DENABLE_CLDNN_BUILD=1 -DENABLE_SAMPLES_CORE=1 -DENABLE_PYTHON=1 -DINSTALL_GMOCK=0 -DINSTALL_GTEST=0 -DBUILD_GMOCK=1 -DBUILD_GTEST=0 -DENABLE_GNA=0 -DCMAKE_CYTHON_EXECUTABLE=cython -DCMAKE_PYTHON_VERSION=3
 pushd ie_bridges/python
 make -j10
 popd
-cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_AR=/usr/bin/gcc-ar -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib .. -DENABLE_CLDNN=0 -DENABLE_INTEL_OMP=0 -DENABLE_OPENCV=0 -DENABLE_CLDNN_BUILD=1 -DENABLE_SAMPLES_CORE=1 -DENABLE_PYTHON_BINDINGS=1 -DINSTALL_GMOCK=0 -DINSTALL_GTEST=0 -DBUILD_GMOCK=1 -DBUILD_GTEST=0 -DENABLE_GNA=0 -DCMAKE_CYTHON_EXECUTABLE=cython -DCMAKE_PYTHON_VERSION=2 -DPYTHON_LIBRARY=/usr/lib64/libpython2.7.so -DPYTHON_EXECUTABLE=/usr/bin/python2 -DPYTHON_INCLUDE_DIR=/usr/include/python2.7
+cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DLIB_SUFFIX=64 -DCMAKE_AR=/usr/bin/gcc-ar -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib .. -DENABLE_CLDNN=0 -DENABLE_INTEL_OMP=0 -DENABLE_OPENCV=0 -DENABLE_CLDNN_BUILD=1 -DENABLE_SAMPLES_CORE=1 -DENABLE_PYTHON=1 -DINSTALL_GMOCK=0 -DINSTALL_GTEST=0 -DBUILD_GMOCK=1 -DBUILD_GTEST=0 -DENABLE_GNA=0 -DCMAKE_CYTHON_EXECUTABLE=cython -DCMAKE_PYTHON_VERSION=2 -DPYTHON_LIBRARY=/usr/lib64/libpython2.7.so -DPYTHON_EXECUTABLE=/usr/bin/python2 -DPYTHON_INCLUDE_DIR=/usr/include/python2.7
 pushd ie_bridges/python
 make -j10
 popd
@@ -103,7 +105,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1549388379
+export SOURCE_DATE_EPOCH=1550007871
 export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
@@ -114,7 +116,7 @@ python3 setup.py build -b py3
 
 popd
 %install
-export SOURCE_DATE_EPOCH=1549388379
+export SOURCE_DATE_EPOCH=1550007871
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/python-dldt
 cp LICENSE %{buildroot}/usr/share/package-licenses/python-dldt/LICENSE
@@ -135,13 +137,10 @@ echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
 ## install_append content
-install -m 0755 -D inference-engine/bin/intel64/RelWithDebInfo/lib/python_api/python3.7/openvino/inference_engine/ie_api.so %{buildroot}/usr/lib/python3.7/site-packages/inference_engine/ie_api.so
-install -m 0755 -D inference-engine/bin/intel64/RelWithDebInfo/lib/python_api/python2.7/openvino/inference_engine/ie_api.so %{buildroot}/usr/lib/python2.7/site-packages/inference_engine/ie_api.so
-mkdir %{buildroot}/usr/lib/python3.7/site-packages/openvino/
-ln -s ../inference_engine %{buildroot}/usr/lib/python3.7/site-packages/openvino/inference_engine
-mkdir %{buildroot}/usr/lib/python2.7/site-packages/openvino/
-touch %{buildroot}/usr/lib/python2.7/site-packages/openvino/__init__.py
-ln -s ../inference_engine %{buildroot}/usr/lib/python2.7/site-packages/openvino/inference_engine
+install -m 0755 -D inference-engine/bin/intel64/RelWithDebInfo/lib/python_api/python3.7/openvino/inference_engine/ie_api.so %{buildroot}/usr/lib/python3.7/site-packages/openvino/inference_engine/ie_api.so
+install -m 0755 -D inference-engine/bin/intel64/RelWithDebInfo/lib/python_api/python3.7/openvino/inference_engine/dnn_builder/dnn_builder.so %{buildroot}/usr/lib/python3.7/site-packages/openvino/inference_engine/dnn_builder/dnn_builder.so
+install -m 0755 -D inference-engine/bin/intel64/RelWithDebInfo/lib/python_api/python2.7/openvino/inference_engine/ie_api.so %{buildroot}/usr/lib/python2.7/site-packages/openvino/inference_engine/ie_api.so
+install -m 0755 -D inference-engine/bin/intel64/RelWithDebInfo/lib/python_api/python2.7/openvino/inference_engine/dnn_builder/dnn_builder.so %{buildroot}/usr/lib/python2.7/site-packages/openvino/inference_engine/dnn_builder/dnn_builder.so
 ## install_append end
 
 %files

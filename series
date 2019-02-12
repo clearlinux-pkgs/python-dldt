@@ -1,3 +1,4 @@
 0001-Build-fixes.patch
 0002-Add-fopenmp.patch
-0010-Don-t-look-for-ade-in-a-subdir.patch
+0003-Don-t-look-for-ade-in-a-subdir.patch
+0004-Fix-Python-setup.py.patch
