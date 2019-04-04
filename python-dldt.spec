@@ -4,10 +4,10 @@
 #
 Name     : python-dldt
 Version  : 2018.r5
-Release  : 17
+Release  : 18
 URL      : https://github.com/opencv/dldt/archive/2018_R5.tar.gz
 Source0  : https://github.com/opencv/dldt/archive/2018_R5.tar.gz
-Summary  : GoogleTest (with main() function)
+Summary  : @PACKAGE_DESCRIPTION@
 Group    : Development/Tools
 License  : Apache-2.0 BSD-3-Clause MIT
 Requires: python-dldt-license = %{version}-%{release}
@@ -23,7 +23,6 @@ Requires: tensorflow
 BuildRequires : Cython
 BuildRequires : ade-dev
 BuildRequires : buildreq-cmake
-BuildRequires : buildreq-distutils23
 BuildRequires : buildreq-distutils3
 BuildRequires : dldt-dev
 BuildRequires : googletest
@@ -34,23 +33,19 @@ BuildRequires : opencv
 BuildRequires : opencv-dev
 BuildRequires : opencv-python
 BuildRequires : pugixml-dev
+BuildRequires : python-dev
+BuildRequires : python3-dev
 Patch1: 0001-Build-fixes.patch
 Patch2: 0002-Add-fopenmp.patch
 Patch3: 0003-Don-t-look-for-ade-in-a-subdir.patch
 Patch4: 0004-Fix-Python-setup.py.patch
 
 %description
-The Google Mock class generator is an application that is part of cppclean.
-visit http://code.google.com/p/cppclean/
-
-%package legacypython
-Summary: legacypython components for the python-dldt package.
-Group: Default
-Requires: python-core
-
-%description legacypython
-legacypython components for the python-dldt package.
-
+# Validation Application
+Inference Engine Validation Application is a tool that allows to infer deep learning models with
+standard inputs and outputs configuration and to collect simple
+validation metrics for topologies. It supports **top-1** and **top-5** metric for Classification networks and
+11-points **mAP** metric for Object Detection networks.
 
 %package license
 Summary: license components for the python-dldt package.
@@ -105,18 +100,18 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1550007871
+export SOURCE_DATE_EPOCH=1554348846
 export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
 export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math "
+export MAKEFLAGS=%{?_smp_mflags}
 pushd inference-engine/ie_bridges/python
-python2 setup.py build -b py2
-python3 setup.py build -b py3
+python3 setup.py build
 
 popd
 %install
-export SOURCE_DATE_EPOCH=1550007871
+export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/python-dldt
 cp LICENSE %{buildroot}/usr/share/package-licenses/python-dldt/LICENSE
@@ -130,8 +125,7 @@ cp inference-engine/thirdparty/mkl-dnn/LICENSE %{buildroot}/usr/share/package-li
 cp inference-engine/thirdparty/mkl-dnn/src/cpu/xbyak/COPYRIGHT %{buildroot}/usr/share/package-licenses/python-dldt/inference-engine_thirdparty_mkl-dnn_src_cpu_xbyak_COPYRIGHT
 cp inference-engine/thirdparty/mkl-dnn/tests/gtests/gtest/LICENSE %{buildroot}/usr/share/package-licenses/python-dldt/inference-engine_thirdparty_mkl-dnn_tests_gtests_gtest_LICENSE
 pushd inference-engine/ie_bridges/python
-python2 -tt setup.py build -b py2 install --root=%{buildroot} --force
-python3 -tt setup.py build -b py3 install --root=%{buildroot} --force
+python3 -tt setup.py build  install --root=%{buildroot}
 popd
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
@@ -141,14 +135,11 @@ install -m 0755 -D inference-engine/bin/intel64/RelWithDebInfo/lib/python_api/py
 install -m 0755 -D inference-engine/bin/intel64/RelWithDebInfo/lib/python_api/python3.7/openvino/inference_engine/dnn_builder/dnn_builder.so %{buildroot}/usr/lib/python3.7/site-packages/openvino/inference_engine/dnn_builder/dnn_builder.so
 install -m 0755 -D inference-engine/bin/intel64/RelWithDebInfo/lib/python_api/python2.7/openvino/inference_engine/ie_api.so %{buildroot}/usr/lib/python2.7/site-packages/openvino/inference_engine/ie_api.so
 install -m 0755 -D inference-engine/bin/intel64/RelWithDebInfo/lib/python_api/python2.7/openvino/inference_engine/dnn_builder/dnn_builder.so %{buildroot}/usr/lib/python2.7/site-packages/openvino/inference_engine/dnn_builder/dnn_builder.so
+rm -rf %{buildroot}/usr/lib/python2*/*
 ## install_append end
 
 %files
 %defattr(-,root,root,-)
-
-%files legacypython
-%defattr(-,root,root,-)
-/usr/lib/python2*/*
 
 %files license
 %defattr(0644,root,root,0755)
