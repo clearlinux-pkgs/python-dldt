@@ -1,4 +1,4 @@
-From 25991af7d8469d7666558a1877f1e273ecc6d0bb Mon Sep 17 00:00:00 2001
+From a69ece8f12416206bb4c2209017ab13514145123 Mon Sep 17 00:00:00 2001
 From: "Brett T. Warden" <brett.t.warden@intel.com>
 Date: Tue, 12 Feb 2019 13:12:52 -0800
 Subject: [PATCH 4/4] Fix Python setup.py
@@ -26,5 +26,5 @@ index 9bbe21d..d1d0a29 100644
      include_package_data=True,
      ext_modules=extensions,
 -- 
-2.20.1
+2.21.0
 
