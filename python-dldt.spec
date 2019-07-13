@@ -4,7 +4,7 @@
 #
 Name     : python-dldt
 Version  : 2019.r1.1
-Release  : 22
+Release  : 23
 URL      : https://github.com/opencv/dldt/archive/2019_R1.1/dldt-2019.R1.1.tar.gz
 Source0  : https://github.com/opencv/dldt/archive/2019_R1.1/dldt-2019.R1.1.tar.gz
 Summary  : @PACKAGE_DESCRIPTION@
